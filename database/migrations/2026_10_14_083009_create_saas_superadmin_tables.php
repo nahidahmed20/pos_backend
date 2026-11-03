@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('companies')) {
+        if (! Schema::hasTable('companies')) {
             Schema::create('companies', function (Blueprint $table): void {
                 $table->id();
                 $table->string('name');
@@ -24,7 +24,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('subscription_packages')) {
+        if (! Schema::hasTable('subscription_packages')) {
             Schema::create('subscription_packages', function (Blueprint $table): void {
                 $table->id();
                 $table->string('name');
@@ -39,7 +39,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('subscriptions')) {
+        if (! Schema::hasTable('subscriptions')) {
             Schema::create('subscriptions', function (Blueprint $table): void {
                 $table->id();
                 $table->foreignId('company_id')->constrained()->cascadeOnDelete();
@@ -51,7 +51,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('domain_requests')) {
+        if (! Schema::hasTable('domain_requests')) {
             Schema::create('domain_requests', function (Blueprint $table): void {
                 $table->id();
                 $table->foreignId('company_id')->constrained()->cascadeOnDelete();
@@ -62,7 +62,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('subscription_transactions')) {
+        if (! Schema::hasTable('subscription_transactions')) {
             Schema::create('subscription_transactions', function (Blueprint $table): void {
                 $table->id();
                 $table->foreignId('company_id')->constrained()->cascadeOnDelete();

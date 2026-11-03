@@ -266,10 +266,12 @@ class ProductController extends Controller
 
     private function branchId(Request $request, ?int $requestedBranchId): int
     {
-        $branchId = $request->user()->isSuperAdmin() ? $requestedBranchId : $request->user()->branch_id;
-        abort_unless($branchId !== null, 422);
+        $branchId = $request->user()->isSuperAdmin()
+            ? ($requestedBranchId ?: ($request->user()->branch_id ?: \App\Models\Branch::first()?->id))
+            : $request->user()->branch_id;
+        abort_unless($branchId !== null, 422, 'Branch ID is required.');
 
-        return $branchId;
+        return (int) $branchId;
     }
 
     private function authorizeProducts(Request $request): void

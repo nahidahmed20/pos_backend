@@ -36,8 +36,9 @@ class CategoryController extends Controller
             'branch_id' => ['nullable', 'integer', 'exists:branches,id'],
             'parent_id' => ['nullable', 'integer', 'exists:categories,id'],
         ]);
+        $parentId = !empty($data['parent_id']) ? (int) $data['parent_id'] : null;
         $branchId = $this->branchId($request, $data['branch_id'] ?? null);
-        $this->validateParent($data['parent_id'] ?? null, $branchId);
+        $this->validateParent($parentId, $branchId);
         if (! empty($data['slug'])) {
             validator($data, [
                 'slug' => [Rule::unique('categories', 'slug')->where('branch_id', $branchId)],
@@ -45,7 +46,7 @@ class CategoryController extends Controller
         }
         abort_unless(! Category::where('branch_id', $branchId)->where('name', $data['name'])->exists(), 422, 'Category already exists in this branch.');
 
-        $category = Category::create([...$data, 'branch_id' => $branchId]);
+        $category = Category::create([...$data, 'branch_id' => $branchId, 'parent_id' => $parentId]);
 
         return response()->json(['data' => $category], 201);
     }
@@ -76,7 +77,9 @@ class CategoryController extends Controller
             'parent_id' => ['sometimes', 'nullable', 'integer', 'exists:categories,id'],
         ]);
         if (array_key_exists('parent_id', $data)) {
-            $this->validateParent($data['parent_id'], $model->branch_id, $model);
+            $parentId = !empty($data['parent_id']) ? (int) $data['parent_id'] : null;
+            $this->validateParent($parentId, $model->branch_id, $model);
+            $data['parent_id'] = $parentId;
         }
         if (isset($data['name'])) {
             abort_unless(! Category::where('branch_id', $model->branch_id)->where('name', $data['name'])->where('id', '!=', $model->id)->exists(), 422, 'Category already exists in this branch.');
@@ -123,10 +126,12 @@ class CategoryController extends Controller
 
     private function branchId(Request $request, ?int $requestedBranchId): int
     {
-        $branchId = $request->user()->isSuperAdmin() ? $requestedBranchId : $request->user()->branch_id;
-        abort_unless($branchId !== null, 422);
+        $branchId = $request->user()->isSuperAdmin()
+            ? ($requestedBranchId ?: ($request->user()->branch_id ?: \App\Models\Branch::first()?->id))
+            : $request->user()->branch_id;
+        abort_unless($branchId !== null, 422, 'Branch ID is required.');
 
-        return $branchId;
+        return (int) $branchId;
     }
 
     private function authorizeProducts(Request $request): void

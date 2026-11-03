@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('todos')) {
+        if (! Schema::hasTable('todos')) {
             Schema::create('todos', function (Blueprint $table): void {
                 $table->id();
                 $table->foreignId('user_id')->constrained()->cascadeOnDelete();
@@ -25,7 +25,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('notes')) {
+        if (! Schema::hasTable('notes')) {
             Schema::create('notes', function (Blueprint $table): void {
                 $table->id();
                 $table->foreignId('user_id')->constrained()->cascadeOnDelete();
@@ -39,7 +39,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('contacts')) {
+        if (! Schema::hasTable('contacts')) {
             Schema::create('contacts', function (Blueprint $table): void {
                 $table->id();
                 $table->foreignId('branch_id')->nullable()->constrained()->nullOnDelete();
@@ -53,7 +53,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('calendar_events')) {
+        if (! Schema::hasTable('calendar_events')) {
             Schema::create('calendar_events', function (Blueprint $table): void {
                 $table->id();
                 $table->foreignId('user_id')->constrained()->cascadeOnDelete();
@@ -69,7 +69,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('call_logs')) {
+        if (! Schema::hasTable('call_logs')) {
             Schema::create('call_logs', function (Blueprint $table): void {
                 $table->id();
                 $table->foreignId('user_id')->constrained()->cascadeOnDelete();
@@ -84,7 +84,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('chat_messages')) {
+        if (! Schema::hasTable('chat_messages')) {
             Schema::create('chat_messages', function (Blueprint $table): void {
                 $table->id();
                 $table->foreignId('sender_id')->constrained('users')->cascadeOnDelete();
@@ -96,7 +96,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('media_files')) {
+        if (! Schema::hasTable('media_files')) {
             Schema::create('media_files', function (Blueprint $table): void {
                 $table->id();
                 $table->foreignId('user_id')->constrained()->cascadeOnDelete();
@@ -110,7 +110,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('projects')) {
+        if (! Schema::hasTable('projects')) {
             Schema::create('projects', function (Blueprint $table): void {
                 $table->id();
                 $table->foreignId('branch_id')->nullable()->constrained()->nullOnDelete();
@@ -124,7 +124,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('ecommerce_reviews')) {
+        if (! Schema::hasTable('ecommerce_reviews')) {
             Schema::create('ecommerce_reviews', function (Blueprint $table): void {
                 $table->id();
                 $table->foreignId('product_id')->constrained()->cascadeOnDelete();

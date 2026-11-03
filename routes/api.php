@@ -198,6 +198,7 @@ Route::middleware(['auth:sanctum'])->group(function (): void {
     Route::apiResource('contacts', ContactController::class);
     Route::apiResource('calendar-events', CalendarEventController::class);
     Route::apiResource('call-logs', CallLogController::class)->only(['index', 'store', 'show', 'destroy']);
+    Route::get('/chat/users', [ChatMessageController::class, 'users']);
     Route::get('/chat/messages', [ChatMessageController::class, 'index']);
     Route::post('/chat/messages', [ChatMessageController::class, 'store']);
     Route::get('/files', [FileManagerController::class, 'index']);

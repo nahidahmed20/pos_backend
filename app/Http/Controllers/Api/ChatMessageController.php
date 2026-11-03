@@ -4,11 +4,29 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ChatMessage;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ChatMessageController extends Controller
 {
+    public function users(Request $request): JsonResponse
+    {
+        $currentUser = $request->user();
+
+        $users = User::query()
+            ->with(['roles:id,name', 'branch:id,name'])
+            ->when(! $currentUser->isSuperAdmin(), function (Builder $query) use ($currentUser): void {
+                $query->where('branch_id', $currentUser->branch_id);
+            })
+            ->where('id', '!=', $currentUser->id)
+            ->orderBy('name')
+            ->get(['id', 'name', 'email', 'branch_id']);
+
+        return response()->json(['data' => $users]);
+    }
+
     public function index(Request $request): JsonResponse
     {
         $userId = $request->user()->id;

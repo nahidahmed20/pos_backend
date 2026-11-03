@@ -72,7 +72,7 @@ class RolePermissionSeeder extends Seeder
 
         $adminUser = User::firstOrCreate(['email' => 'admin@gmail.com'], [
             'name' => 'Super Admin',
-            'password' => Hash::make('password123'),
+            'password' => Hash::make('12345678'),
         ]);
 
         $adminUser->update(['branch_id' => null]);
@@ -80,7 +80,7 @@ class RolePermissionSeeder extends Seeder
 
         $branchAdmin = User::firstOrCreate(['email' => 'branchadmin@gmail.com'], [
             'name' => 'Branch Admin',
-            'password' => Hash::make('password123'),
+            'password' => Hash::make('12345678'),
         ]);
 
         $branchAdmin->update(['branch_id' => $mainBranch->id]);

@@ -39,8 +39,10 @@ class SupplierController extends Controller
             'is_active' => ['sometimes', 'boolean'],
             'branch_id' => ['nullable', 'integer', 'exists:branches,id'],
         ]);
-        $branchId = $request->user()->isSuperAdmin() ? ($data['branch_id'] ?? null) : $request->user()->branch_id;
-        abort_unless($branchId !== null, 422);
+        $branchId = $request->user()->isSuperAdmin()
+            ? (($data['branch_id'] ?? null) ?: ($request->user()->branch_id ?: \App\Models\Branch::first()?->id))
+            : $request->user()->branch_id;
+        abort_unless($branchId !== null, 422, 'Branch ID is required.');
         $supplier = Supplier::create([...$data, 'branch_id' => $branchId]);
 
         return response()->json(['data' => $supplier->refresh()], 201);
