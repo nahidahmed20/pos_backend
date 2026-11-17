@@ -28,6 +28,7 @@
                 <button class="nav-link" data-view="purchases" data-permission="manage purchases"><span>⇣</span> Purchases</button>
                 <button class="nav-link" data-view="expenses" data-permission="manage expenses"><span>↗</span> Expenses</button>
                 <button class="nav-link" data-view="reports" data-permission="view reports"><span>▤</span> Reports</button>
+                <button class="nav-link" data-view="settings" data-permission="manage branches"><span>⚙</span> Business settings</button>
             </nav>
             <div class="sidebar-bottom">
                 <div class="support-note"><span class="status-dot"></span><span>Workspace is ready<small>Branch data stays private</small></span></div>
@@ -235,6 +236,51 @@
             <section id="view-reports" class="page-view">
                 <div class="page-heading"><div><p class="eyebrow">BUSINESS PERFORMANCE</p><h1>Reports</h1><p class="muted">A quick summary of sales, purchases and expenses.</p></div><button id="refresh-reports" class="button button-secondary">Refresh</button></div>
                 <div id="report-stats" class="stats-grid"></div>
+            </section>
+
+            <section id="view-settings" class="page-view" data-permission="manage branches">
+                <div class="page-heading"><div><p class="eyebrow">WORKSPACE CONFIGURATION</p><h1>Business settings</h1><p class="muted">Set the business details, currency, receipt text and stock defaults for the selected branch.</p></div><button id="reload-settings" class="button button-secondary" type="button">Reload</button></div>
+                <form id="business-settings-form">
+                    <article class="panel form-panel">
+                        <div class="panel-header"><div><p class="eyebrow">BUSINESS PROFILE</p><h2>Business information</h2></div></div>
+                        <div class="form-grid">
+                            <label>Business name<input name="company_name" maxlength="255" placeholder="Your business name"></label>
+                            <label>App name<input name="app_name" maxlength="255" placeholder="Name shown in the app"></label>
+                            <label>Phone<input name="phone" maxlength="50" placeholder="Business phone"></label>
+                            <label>Email<input name="email" type="email" maxlength="255" placeholder="Business email"></label>
+                            <label>Website<input name="website" type="url" maxlength="255" placeholder="https://example.com"></label>
+                            <label>Tax / BIN number<input name="tax_number" maxlength="100" placeholder="VAT or BIN number"></label>
+                            <label class="form-wide">Address<textarea name="address" rows="2" maxlength="1000" placeholder="Business address"></textarea></label>
+                        </div>
+                    </article>
+                    <article class="panel form-panel">
+                        <div class="panel-header"><div><p class="eyebrow">REGIONAL PREFERENCES</p><h2>Currency and format</h2></div></div>
+                        <div class="form-grid">
+                            <label>Currency code<input name="currency_code" maxlength="3" placeholder="BDT"></label>
+                            <label>Currency symbol<input name="currency_symbol" maxlength="10" placeholder="৳"></label>
+                            <label>Timezone<input name="timezone" maxlength="100" placeholder="Asia/Dhaka"></label>
+                            <label>Date format<select name="date_format"><option value="d/m/Y">DD/MM/YYYY</option><option value="Y-m-d">YYYY-MM-DD</option><option value="m/d/Y">MM/DD/YYYY</option></select></label>
+                            <label>Decimal places<input name="decimal_places" type="number" min="0" max="4" step="1" value="2"></label>
+                        </div>
+                    </article>
+                    <article class="panel form-panel">
+                        <div class="panel-header"><div><p class="eyebrow">CUSTOMER RECEIPT</p><h2>Receipt details</h2></div></div>
+                        <div class="form-grid">
+                            <label>Invoice prefix<input name="invoice_prefix" maxlength="30" placeholder="INV-"></label>
+                            <label>Default payment method<select name="default_payment_method"><option value="cash">Cash</option><option value="card">Card</option><option value="mobile_banking">Mobile banking</option><option value="bank_transfer">Bank transfer</option></select></label>
+                            <label class="form-wide">Receipt header<textarea name="receipt_header" rows="2" maxlength="500" placeholder="Text shown at the top of receipts"></textarea></label>
+                            <label class="form-wide">Receipt footer<textarea name="receipt_footer" rows="2" maxlength="500" placeholder="Thank you for shopping with us!"></textarea></label>
+                        </div>
+                    </article>
+                    <article class="panel form-panel">
+                        <div class="panel-header"><div><p class="eyebrow">INVENTORY DEFAULTS</p><h2>Stock behavior</h2></div></div>
+                        <div class="form-grid">
+                            <label>Low stock alert threshold<input name="low_stock_threshold" type="number" min="0" step="1" value="5"></label>
+                            <label class="checkbox-field"><input name="allow_negative_stock" type="checkbox" value="1"> Allow sales when stock is zero</label>
+                        </div>
+                    </article>
+                    <div class="form-actions"><p id="settings-message" class="form-message" role="status"></p><button id="save-settings" class="button button-primary" type="submit">Save business settings</button></div>
+                </form>
             </section>
         </main>
     </div>

@@ -75,6 +75,8 @@
             loadExpenses();
         } else if (name === 'reports') {
             loadReports();
+        } else if (name === 'settings') {
+            loadSettings();
         } else if (name === 'overview') {
             loadOverview();
         }
@@ -864,6 +866,26 @@
         return Object.fromEntries(new FormData(form).entries());
     }
 
+    async function loadSettings() {
+        setMessage('#settings-message', 'Loading settings…');
+        try {
+            const { data } = await api(`/settings${state.branchId ? `?branch_id=${state.branchId}` : ''}`);
+            const form = $('#business-settings-form');
+            Object.entries(data || {}).forEach(([key, value]) => {
+                const field = form.elements.namedItem(key);
+                if (!field) return;
+                if (field.type === 'checkbox') {
+                    field.checked = value === true || value === '1' || value === 'true';
+                } else if (value !== null) {
+                    field.value = value;
+                }
+            });
+            setMessage('#settings-message', 'Settings loaded.', true);
+        } catch (error) {
+            setMessage('#settings-message', error.message);
+        }
+    }
+
     function setUpEvents() {
         $('#workspace-nav').addEventListener('click', (event) => {
             const link = event.target.closest('[data-view]');
@@ -1387,6 +1409,27 @@
         });
         $('#product-search').addEventListener('input', loadProducts);
         $('#refresh-reports').addEventListener('click', loadReports);
+        $('#reload-settings').addEventListener('click', loadSettings);
+        $('#business-settings-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const form = event.currentTarget;
+            const settings = Object.fromEntries(new FormData(form).entries());
+            settings.allow_negative_stock = form.elements.allow_negative_stock.checked ? '1' : '0';
+            $('#save-settings').disabled = true;
+            setMessage('#settings-message', 'Saving settings…');
+            try {
+                await api('/settings', {
+                    method: 'POST',
+                    body: JSON.stringify({ settings, branch_id: state.branchId, group: 'business' }),
+                });
+                setMessage('#settings-message', 'Business settings saved.', true);
+                toast('Business settings saved.');
+            } catch (error) {
+                setMessage('#settings-message', error.message);
+            } finally {
+                $('#save-settings').disabled = false;
+            }
+        });
         $('#branch-switcher').addEventListener('change', (event) => {
             state.branchId = Number(event.target.value);
             const branch = state.branches.find((item) => item.id === state.branchId);

@@ -219,6 +219,10 @@ td strong { color: #25332d; font-size: 10px; }
 .form-grid input, .form-grid select { display: block; margin-top: 6px; }
 .form-wide { grid-column: 1 / -1; }
 .form-grid button { justify-self: start; min-width: 150px; }
+.checkbox-field { display: flex; align-items: center; gap: 9px; min-height: 42px; }
+.checkbox-field input { width: 17px; height: 17px; margin: 0; }
+.form-actions { display: flex; align-items: center; justify-content: flex-end; gap: 16px; margin-top: 18px; }
+.form-actions .form-message { margin: 0 auto 0 0; }
 .form-hint { margin: 12px 0 0; font-size: 11px; }
 .danger-button { color: #b64f49; }
 .action-dialog { width: min(460px, calc(100vw - 30px)); max-height: min(85vh, 760px); overflow-y: auto; border: 1px solid #e7ece9; border-radius: 14px; padding: 22px; box-shadow: 0 22px 80px rgba(19,42,32,.2); }
